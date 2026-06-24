@@ -1,34 +1,24 @@
-import { prisma } from "@/lib/prisma";
 import { createPage } from "./actions";
-import Link from "next/link";
 
-export default async function Home() {
-  const user = await prisma.user.upsert({
-    where: { email: "test@exemple.com" },
-    update: {},
-    create: { email: "test@exemple.com", name: "Moi" },
-  });
-
-  const pages = await prisma.page.findMany({
-    where: { userId: user.id },
-    orderBy: { createdAt: "desc" },
-  });
-
+export default function Home() {
   return (
-    <main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
-      <h1>Mes pages</h1>
+    <main className="mx-auto flex min-h-screen max-w-2xl flex-col items-center justify-center px-12 text-center">
+      <div className="text-5xl">👋</div>
+      <h1 className="mt-4 text-2xl font-bold text-stone-900">
+        Bienvenue dans My Notion
+      </h1>
+      <p className="mt-2 text-stone-500">
+        Choisis une page à gauche, ou commence une nouvelle page.
+      </p>
 
-      <form action={createPage}>
-        <button type="submit">+ Nouvelle page</button>
+      <form action={createPage} className="mt-6">
+        <button
+          type="submit"
+          className="rounded-lg bg-stone-900 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-stone-700"
+        >
+          + Créer une page
+        </button>
       </form>
-
-      <ul>
-        {pages.map((p) => (
-          <li key={p.id}>
-            <Link href={`/pages/${p.id}`}>{p.title}</Link>
-          </li>
-        ))}
-      </ul>
     </main>
   );
 }

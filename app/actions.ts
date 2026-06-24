@@ -23,11 +23,20 @@ export async function createPage() {
   revalidatePath("/");
 }
 
+export async function updatePageContent(id: string, content: unknown) {
+  await prisma.page.update({
+    where: { id },
+    // content est le tableau de blocs JSON que l'éditeur nous donne
+    data: { content: content as any },
+  });
+}
+
 export async function updatePageTitle(id: string, title: string) {
   await prisma.page.update({
     where: { id },
     data: { title },
   });
+  
 
   revalidatePath(`/pages/${id}`);
   revalidatePath("/");
