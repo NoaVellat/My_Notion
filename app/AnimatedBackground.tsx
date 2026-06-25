@@ -1,34 +1,31 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { usePathname } from "next/navigation";
 import * as THREE from "three";
-import { getThemeForPath } from "./themes";
+import { useTheme } from "./ThemeProvider";
 
 export default function AnimatedBackground() {
   const mountRef = useRef<HTMLDivElement>(null);
-  const pathname = usePathname();
+  const theme = useTheme();
 
   // Cible visée (palette + style), lue par la boucle d'animation.
-  const initial = getThemeForPath(pathname);
   const targetRef = useRef({
-    deep: new THREE.Color(...initial.shader.deep),
-    mid: new THREE.Color(...initial.shader.mid),
-    glow: new THREE.Color(...initial.shader.glow),
-    style: initial.bgStyle,
+    deep: new THREE.Color(...theme.shader.deep),
+    mid: new THREE.Color(...theme.shader.mid),
+    glow: new THREE.Color(...theme.shader.glow),
+    style: theme.bgStyle,
   });
 
-  // À chaque changement de page : on met à jour la cible (la transition de
+  // À chaque changement de thème : on met à jour la cible (la transition de
   // couleur se fait en douceur dans la boucle ; le style change instantanément).
   useEffect(() => {
-    const t = getThemeForPath(pathname);
     targetRef.current = {
-      deep: new THREE.Color(...t.shader.deep),
-      mid: new THREE.Color(...t.shader.mid),
-      glow: new THREE.Color(...t.shader.glow),
-      style: t.bgStyle,
+      deep: new THREE.Color(...theme.shader.deep),
+      mid: new THREE.Color(...theme.shader.mid),
+      glow: new THREE.Color(...theme.shader.glow),
+      style: theme.bgStyle,
     };
-  }, [pathname]);
+  }, [theme]);
 
   useEffect(() => {
     const mount = mountRef.current;

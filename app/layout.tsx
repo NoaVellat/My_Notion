@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import Sidebar from "./Sidebar";
 import "./globals.css";
 import AnimatedBackground from "./AnimatedBackground";
+import ThemeProvider from "./ThemeProvider";
 import ThemeController from "./ThemeController";
 import {
   Space_Grotesk,
@@ -54,17 +55,19 @@ export default async function RootLayout({
   return (
     <html lang="fr" className={fontVars}>
       <body className="antialiased">
-        <ThemeController />
-        <AnimatedBackground />
-        <div className="flex min-h-screen">
-          <Sidebar pages={pages} />
-         <div
-            className="flex-1"
-            style={{ perspective: "1200px", overflow: "hidden", isolation: "isolate" }}
-          >
-            {children}
+        <ThemeProvider>
+          <ThemeController />
+          <AnimatedBackground />
+          <div className="flex min-h-screen">
+            <Sidebar pages={pages} />
+            <div
+              className="flex-1"
+              style={{ perspective: "1200px", overflow: "hidden", isolation: "isolate" }}
+            >
+              {children}
+            </div>
           </div>
-        </div>
+        </ThemeProvider>
       </body>
     </html>
   );
