@@ -95,3 +95,22 @@ export async function deletePages(ids: string[]) {
   });
   revalidatePath("/");
 }
+
+ export async function createSubPage(parentId: string) {
+  const user = await prisma.user.upsert({
+    where: { email: "test@exemple.com" },
+    update: {},
+    create: { email: "test@exemple.com", name: "Moi" },
+  });
+
+  const page = await prisma.page.create({
+    data: {
+      title: "Sous-page",
+      userId: user.id,
+      parentId, // c'est ça qui la rattache à sa page parente
+    },
+  });
+
+  revalidatePath("/");
+  return page.id;
+}

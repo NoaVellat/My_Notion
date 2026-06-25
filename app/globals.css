@@ -1,7 +1,21 @@
 @import "tailwindcss";
 
+/* Valeurs par défaut (thème Indigo) avant que ThemeController prenne le relais */
+:root {
+  --accent: #818cf8;
+  --accent-2: #a78bfa;
+  --text: #e0e7ff;
+  --text-muted: #a5b4fc;
+  --surface: rgba(30, 27, 75, 0.4);
+  --surface-border: rgba(255, 255, 255, 0.1);
+  --font-current: var(--font-grotesk);
+}
+
 body {
-  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-current), ui-sans-serif, system-ui, sans-serif;
+  color: var(--text);
+  /* Transition douce des couleurs lors du changement de thème */
+  transition: color 0.6s ease;
 }
 
 /* Le dégradé qui se déplace lentement, façon "aurore" */

@@ -5,6 +5,7 @@ import { updatePageTitle } from "@/app/actions";
 import EditorWrapper from "@/app/EditorWrapper";
 import StatusSelector from "@/app/StatusSelector";
 import DeletePageButton from "@/app/DeletePageButton";
+import SubPageButton from "@/app/SubPageButton";
 
 export default async function PageDetail({
   params,
@@ -15,6 +16,7 @@ export default async function PageDetail({
 
   const page = await prisma.page.findUnique({
     where: { id },
+    include: { parent: true },
   });
 
   if (!page) {
@@ -30,12 +32,25 @@ export default async function PageDetail({
   return (
     <main className="mx-auto max-w-2xl px-12 py-20">
       <div className="flex items-center justify-between">
-        <Link
-          href="/"
-          className="text-sm text-stone-400 transition hover:text-stone-700"
-        >
-          ← Retour
-        </Link>
+        {/* Fil d'Ariane : si la page a un parent, on l'affiche */}
+       <div className="flex items-center gap-1 text-sm text-[var(--text-muted)]">
+          <Link href="/" className="transition hover:text-white">
+            Accueil
+          </Link>
+          {page.parent && (
+            <>
+              <span>›</span>
+              <Link
+                href={`/pages/${page.parent.id}`}
+                className="transition hover:text-white"
+              >
+                {page.parent.icon ?? "📄"} {page.parent.title}
+              </Link>
+            </>
+          )}
+          <span>›</span>
+          <span className="text-white">{page.icon ?? "📄"} {page.title}</span>
+        </div>
         <DeletePageButton pageId={page.id} />
       </div>
 
@@ -47,7 +62,7 @@ export default async function PageDetail({
             name="title"
             defaultValue={page.title}
             placeholder="Sans titre"
-            className="w-full border-none bg-transparent text-4xl font-bold text-stone-900 outline-none placeholder:text-stone-300"
+            className="w-full border-none bg-transparent text-4xl font-bold text-white outline-none placeholder:text-[var(--text-muted)]"
           />
           <button
             type="submit"
@@ -58,11 +73,12 @@ export default async function PageDetail({
         </form>
       </div>
 
-      <div className="mt-4">
+      <div className="mt-4 flex items-center gap-3">
         <StatusSelector pageId={page.id} current={page.status} />
+        <SubPageButton parentId={page.id} />
       </div>
 
-      <div className="mt-6 border-t border-stone-100 pt-6">
+      <div className="mt-6 border-t border-white/20 pt-6">
         <EditorWrapper pageId={page.id} initialContent={page.content} />
       </div>
     </main>

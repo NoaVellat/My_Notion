@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion } from "motion/react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import { createPage } from "./actions";
 
 type Page = {
@@ -10,6 +11,7 @@ type Page = {
   title: string;
   icon: string | null;
   status: string;
+  children?: Page[];
 };
 
 function dotColor(status: string) {
@@ -18,25 +20,85 @@ function dotColor(status: string) {
   return "bg-blue-500";
 }
 
+// Une ligne de page, qui sait afficher ses sous-pages
+function PageRow({ page, depth }: { page: Page; depth: number }) {
+  const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+  const isActive = pathname === `/pages/${page.id}`;
+  const hasChildren = page.children && page.children.length > 0;
+
+  return (
+    <div>
+      <div
+        className={`flex items-center gap-1 rounded-lg pr-2 text-sm transition ${
+          isActive
+            ? "bg-white/10 font-medium text-white shadow-sm"
+            : "text-[var(--text-muted)] hover:bg-white/5 hover:text-white"
+        }`}
+        style={{ paddingLeft: `${depth * 14 + 4}px` }}
+      >
+        {/* La flèche pour déplier (seulement s'il y a des enfants) */}
+        {hasChildren ? (
+          <button
+            onClick={() => setOpen((o) => !o)}
+            className="flex h-5 w-5 shrink-0 items-center justify-center rounded text-[var(--text-muted)] hover:bg-white/10"
+          >
+            <motion.span animate={{ rotate: open ? 90 : 0 }} className="text-xs">
+              ▶
+            </motion.span>
+          </button>
+        ) : (
+          <span className="w-5 shrink-0" />
+        )}
+
+        <Link
+          href={`/pages/${page.id}`}
+          className="flex flex-1 items-center gap-2 truncate py-1.5"
+        >
+          <span className="text-base leading-none">{page.icon ?? "📄"}</span>
+          <span className="flex-1 truncate">{page.title}</span>
+          <span className={`h-2 w-2 shrink-0 rounded-full ${dotColor(page.status)}`} />
+        </Link>
+      </div>
+
+      {/* Les sous-pages, affichées quand c'est déplié */}
+      <AnimatePresence>
+        {open && hasChildren && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="overflow-hidden"
+          >
+            {page.children!.map((child) => (
+              <PageRow key={child.id} page={child} depth={depth + 1} />
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 export default function Sidebar({ pages }: { pages: Page[] }) {
   const pathname = usePathname();
 
-  // Style commun aux liens de navigation, selon qu'ils sont actifs ou non
   function navClass(active: boolean) {
     return `flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm transition active:scale-[0.97] ${
       active
-        ? "bg-white font-medium text-indigo-700 shadow-sm"
-        : "text-stone-600 hover:bg-indigo-200/60"
+        ? "bg-white/10 font-medium text-white shadow-sm"
+        : "text-[var(--text-muted)] hover:bg-white/5 hover:text-white"
     }`;
   }
 
   return (
-    <aside className="flex w-64 flex-col border-r border-indigo-200 bg-indigo-100 p-2">
+    <aside className="flex w-64 flex-col border-r border-[var(--surface-border)] bg-[var(--surface)] p-2 backdrop-blur-xl transition-colors duration-700">
       <div className="flex items-center gap-2 rounded-lg px-2 py-1.5">
-        <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 text-xs font-bold text-white shadow-sm">
+        <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--accent)] to-[var(--accent-2)] text-xs font-bold text-white shadow-sm">
           M
         </span>
-        <span className="text-sm font-semibold text-stone-800">My Notion</span>
+        <span className="text-sm font-semibold text-white">My Notion</span>
       </div>
 
       <form action={createPage} className="mt-2">
@@ -44,7 +106,7 @@ export default function Sidebar({ pages }: { pages: Page[] }) {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.96 }}
           type="submit"
-          className="flex w-full items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-500 to-violet-600 px-2 py-1.5 text-sm font-medium text-white shadow-sm shadow-indigo-500/30 transition hover:shadow-md"
+          className="flex w-full items-center gap-2 rounded-lg bg-gradient-to-r from-[var(--accent)] to-[var(--accent-2)] px-2 py-1.5 text-sm font-medium text-white shadow-sm transition hover:shadow-md"
         >
           <span className="text-base leading-none">+</span>
           Nouvelle page
@@ -66,33 +128,17 @@ export default function Sidebar({ pages }: { pages: Page[] }) {
         </Link>
       </nav>
 
-      <p className="mt-4 px-2 text-xs font-semibold uppercase tracking-wider text-indigo-400">
+      <p className="mt-4 px-2 text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
         Pages
       </p>
 
       <nav className="mt-1 flex flex-col gap-0.5">
         {pages.length === 0 && (
-          <p className="px-2 py-1.5 text-sm text-stone-400">Aucune page</p>
+          <p className="px-2 py-1.5 text-sm text-[var(--text-muted)]">Aucune page</p>
         )}
-        {pages.map((p, i) => {
-          const isActive = pathname === `/pages/${p.id}`;
-          return (
-            <motion.div
-              key={p.id}
-              initial={{ opacity: 0, x: -8 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.04 }}
-            >
-              <Link href={`/pages/${p.id}`} className={navClass(isActive)}>
-                <span className="text-base leading-none">{p.icon ?? "📄"}</span>
-                <span className="flex-1 truncate">{p.title}</span>
-                <span
-                  className={`h-2 w-2 shrink-0 rounded-full ${dotColor(p.status)}`}
-                />
-              </Link>
-            </motion.div>
-          );
-        })}
+        {pages.map((p) => (
+          <PageRow key={p.id} page={p} depth={0} />
+        ))}
       </nav>
     </aside>
   );

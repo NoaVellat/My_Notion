@@ -64,11 +64,11 @@ export default function AllPagesList({ pages }: { pages: Page[] }) {
             type="checkbox"
             checked={allChecked}
             onChange={toggleAll}
-            className="h-4 w-4 accent-indigo-500"
+            className="h-4 w-4 accent-[var(--accent)]"
           />
           Tout sélectionner
         </label>
-        <span className="text-sm text-indigo-200">
+        <span className="text-sm text-[var(--text-muted)]">
           {pages.length} page{pages.length > 1 ? "s" : ""}
         </span>
       </div>
@@ -76,7 +76,7 @@ export default function AllPagesList({ pages }: { pages: Page[] }) {
       {/* La liste */}
       <div className="mt-2 flex flex-col">
         {pages.length === 0 && (
-          <p className="py-8 text-center text-sm text-indigo-200">
+          <p className="py-8 text-center text-sm text-[var(--text-muted)]">
             Aucune page pour l'instant.
           </p>
         )}
@@ -94,7 +94,7 @@ export default function AllPagesList({ pages }: { pages: Page[] }) {
                 type="checkbox"
                 checked={isChecked}
                 onChange={() => toggle(p.id)}
-                className="h-5 w-5 shrink-0 accent-indigo-500"
+                className="h-5 w-5 shrink-0 accent-[var(--accent)]"
               />
               <button
                 onClick={() => router.push(`/pages/${p.id}`)}

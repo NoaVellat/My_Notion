@@ -3,12 +3,26 @@ import { prisma } from "@/lib/prisma";
 import Sidebar from "./Sidebar";
 import "./globals.css";
 import AnimatedBackground from "./AnimatedBackground";
-import { Space_Grotesk } from "next/font/google";
+import ThemeController from "./ThemeController";
+import {
+  Space_Grotesk,
+  Sora,
+  Quicksand,
+  JetBrains_Mono,
+  Playfair_Display,
+} from "next/font/google";
 
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-display",
-});
+// Une police par thème (voir themes.ts). Toutes sont exposées en variables CSS
+// sur <html> ; ThemeController choisit laquelle est active selon la page.
+const grotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-grotesk" });
+const sora = Sora({ subsets: ["latin"], variable: "--font-sora" });
+const quicksand = Quicksand({ subsets: ["latin"], variable: "--font-round" });
+const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
+const serif = Playfair_Display({ subsets: ["latin"], variable: "--font-serif" });
+
+const fontVars = [grotesk, sora, quicksand, mono, serif]
+  .map((f) => f.variable)
+  .join(" ");
 
 export const metadata: Metadata = {
   title: "My Notion",
@@ -27,13 +41,20 @@ export default async function RootLayout({
   });
 
   const pages = await prisma.page.findMany({
-    where: { userId: user.id },
+    where: { userId: user.id, parentId: null },
     orderBy: { createdAt: "desc" },
+    include: {
+      children: {
+        orderBy: { createdAt: "asc" },
+        select: { id: true, title: true, icon: true, status: true },
+      },
+    },
   });
 
   return (
-    <html lang="fr" className={spaceGrotesk.variable}>
-      <body className="text-stone-800 antialiased">
+    <html lang="fr" className={fontVars}>
+      <body className="antialiased">
+        <ThemeController />
         <AnimatedBackground />
         <div className="flex min-h-screen">
           <Sidebar pages={pages} />
