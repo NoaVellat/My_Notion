@@ -23,7 +23,7 @@ export default function DeletePageButton({ pageId }: { pageId: string }) {
         whileTap={{ scale: 0.95 }}
         type="button"
         onClick={() => setOpen(true)}
-        className="rounded-lg px-3 py-1.5 text-sm font-medium text-red-500 transition hover:bg-red-50"
+        className="rounded-lg px-3 py-1.5 text-sm font-medium text-red-300 transition hover:bg-red-500/15 hover:text-red-200"
       >
         🗑 Supprimer
       </motion.button>

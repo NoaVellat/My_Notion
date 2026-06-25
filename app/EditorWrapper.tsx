@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 // ssr: false = "ne rends jamais ça côté serveur, seulement dans le navigateur"
 const Editor = dynamic(() => import("./Editor"), {
   ssr: false,
-  loading: () => <p className="text-stone-400">Chargement de l'éditeur…</p>,
+  loading: () => <p className="text-stone-400">Chargement de l&apos;éditeur…</p>,
 });
 
 export default function EditorWrapper({

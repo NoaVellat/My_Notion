@@ -16,8 +16,8 @@ export default async function BoardPage() {
 
   return (
     <div>
-     <div className="bg-gradient-to-r from-[var(--accent)] to-[var(--accent-2)] px-8 py-6 transition-colors duration-700">
-        <h1 className="text-2xl font-bold text-white">Tableau</h1>
+     <div className="bg-gradient-to-r from-[var(--accent)] to-[var(--accent-2)] px-4 py-5 pl-16 transition-colors duration-700 md:px-8 md:py-6 md:pl-8">
+        <h1 className="text-xl font-bold text-white md:text-2xl">Tableau</h1>
         <p className="text-sm text-white/80">
           Glisse tes pages d&apos;une colonne à l&apos;autre.
         </p>

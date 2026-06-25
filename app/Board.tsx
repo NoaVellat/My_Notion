@@ -59,7 +59,7 @@ export default function Board({ initialPages }: { initialPages: Page[] }) {
   }
 
   return (
-    <div className="flex gap-4 p-8">
+    <div className="scrollbar-slim flex snap-x snap-mandatory gap-4 overflow-x-auto p-4 md:snap-none md:p-8">
       {COLUMNS.map((col, i) => {
         const cards = pages.filter((p) => p.status === col.value);
         const isOver = dragOverCol === col.value;
@@ -77,7 +77,7 @@ export default function Board({ initialPages }: { initialPages: Page[] }) {
               setDragOverCol((c) => (c === col.value ? null : c))
             }
             onDrop={() => handleDrop(draggingId, col.value)}
-            className={`flex w-72 flex-col rounded-2xl p-3 transition-all ${col.colBg} ${
+            className={`flex w-[78vw] max-w-72 shrink-0 snap-start flex-col rounded-2xl p-3 transition-all sm:w-72 ${col.colBg} ${
               isOver ? `ring-4 ${col.ring} shadow-xl` : "shadow-sm"
             }`}
           >

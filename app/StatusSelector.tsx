@@ -33,7 +33,9 @@ export default function StatusSelector({
           whileTap={{ scale: 0.95 }}
           onClick={() => choose(s.value)}
           className={`rounded-full px-3 py-1 text-xs font-medium transition ${
-            status === s.value ? s.active : "text-stone-500 hover:bg-stone-100"
+            status === s.value
+              ? s.active
+              : "text-[var(--text-muted)] hover:bg-white/10 hover:text-white"
           }`}
         >
           {s.label}

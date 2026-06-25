@@ -30,10 +30,10 @@ export default async function PageDetail({
   }
 
   return (
-    <main className="mx-auto max-w-2xl px-12 py-20">
-      <div className="flex items-center justify-between">
+    <main className="mx-auto max-w-2xl px-4 py-16 md:px-12 md:py-20">
+      <div className="flex items-center justify-between gap-3">
         {/* Fil d'Ariane : si la page a un parent, on l'affiche */}
-       <div className="flex items-center gap-1 text-sm text-[var(--text-muted)]">
+       <div className="flex flex-wrap items-center gap-1 text-sm text-[var(--text-muted)]">
           <Link href="/" className="transition hover:text-white">
             Accueil
           </Link>
@@ -55,14 +55,14 @@ export default async function PageDetail({
       </div>
 
       <div className="mt-8 flex items-start gap-3">
-        <span className="text-5xl leading-none">{page.icon ?? "📄"}</span>
-        <form action={handleRename} className="flex flex-1 items-center gap-3">
+        <span className="text-4xl leading-none md:text-5xl">{page.icon ?? "📄"}</span>
+        <form action={handleRename} className="flex flex-1 items-center gap-2 md:gap-3">
           <input
             type="text"
             name="title"
             defaultValue={page.title}
             placeholder="Sans titre"
-            className="w-full border-none bg-transparent text-4xl font-bold text-white outline-none placeholder:text-[var(--text-muted)]"
+            className="w-full min-w-0 border-none bg-transparent text-2xl font-bold text-white outline-none placeholder:text-[var(--text-muted)] md:text-4xl"
           />
           <button
             type="submit"
@@ -78,7 +78,7 @@ export default async function PageDetail({
         <SubPageButton parentId={page.id} />
       </div>
 
-      <div className="mt-6 border-t border-white/20 pt-6">
+      <div className="mt-6 overflow-hidden rounded-2xl bg-white p-2 text-stone-800 shadow-lg md:p-4">
         <EditorWrapper pageId={page.id} initialContent={page.content} />
       </div>
     </main>

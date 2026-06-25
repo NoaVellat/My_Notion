@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 import { deletePages } from "./actions";
+import CreatePageModal from "./CreatePageModal";
 
 type Page = {
   id: string;
@@ -55,6 +56,30 @@ export default function AllPagesList({ pages }: { pages: Page[] }) {
 
   const allChecked = pages.length > 0 && selected.size === pages.length;
 
+  // État vide : une invitation soignée plutôt qu'une page blanche.
+  if (pages.length === 0) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: "spring", stiffness: 240, damping: 22 }}
+        className="flex flex-col items-center rounded-2xl border border-dashed border-white/20 bg-white/5 px-6 py-14 text-center backdrop-blur-sm"
+      >
+        <div className="text-5xl">🗂️</div>
+        <h2 className="mt-4 text-xl font-semibold text-white">
+          Aucune page pour l&apos;instant
+        </h2>
+        <p className="mt-2 max-w-sm text-sm text-[var(--text-muted)]">
+          Crée ta première page pour commencer à écrire et l&apos;organiser sur
+          le tableau.
+        </p>
+        <div className="mt-6">
+          <CreatePageModal />
+        </div>
+      </motion.div>
+    );
+  }
+
   return (
     <div>
       {/* Barre du haut : tout sélectionner + compteur */}
@@ -75,11 +100,6 @@ export default function AllPagesList({ pages }: { pages: Page[] }) {
 
       {/* La liste */}
       <div className="mt-2 flex flex-col">
-        {pages.length === 0 && (
-          <p className="py-8 text-center text-sm text-[var(--text-muted)]">
-            Aucune page pour l'instant.
-          </p>
-        )}
         {pages.map((p) => {
           const isChecked = selected.has(p.id);
           const status = STATUS_LABEL[p.status] ?? STATUS_LABEL.todo;
