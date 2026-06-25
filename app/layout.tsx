@@ -2,6 +2,13 @@ import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import Sidebar from "./Sidebar";
 import "./globals.css";
+import AnimatedBackground from "./AnimatedBackground";
+import { Space_Grotesk } from "next/font/google";
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-display",
+});
 
 export const metadata: Metadata = {
   title: "My Notion",
@@ -25,11 +32,17 @@ export default async function RootLayout({
   });
 
   return (
-    <html lang="fr">
-      <body className="bg-white text-stone-800 antialiased">
+    <html lang="fr" className={spaceGrotesk.variable}>
+      <body className="text-stone-800 antialiased">
+        <AnimatedBackground />
         <div className="flex min-h-screen">
           <Sidebar pages={pages} />
-          <div className="flex-1">{children}</div>
+         <div
+            className="flex-1"
+            style={{ perspective: "1200px", overflow: "hidden", isolation: "isolate" }}
+          >
+            {children}
+          </div>
         </div>
       </body>
     </html>

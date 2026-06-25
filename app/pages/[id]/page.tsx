@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { updatePageTitle } from "@/app/actions";
 import EditorWrapper from "@/app/EditorWrapper";
+import StatusSelector from "@/app/StatusSelector";
+import DeletePageButton from "@/app/DeletePageButton";
 
 export default async function PageDetail({
   params,
@@ -27,12 +29,15 @@ export default async function PageDetail({
 
   return (
     <main className="mx-auto max-w-2xl px-12 py-20">
-      <Link
-        href="/"
-        className="text-sm text-stone-400 transition hover:text-stone-700"
-      >
-        ← Retour
-      </Link>
+      <div className="flex items-center justify-between">
+        <Link
+          href="/"
+          className="text-sm text-stone-400 transition hover:text-stone-700"
+        >
+          ← Retour
+        </Link>
+        <DeletePageButton pageId={page.id} />
+      </div>
 
       <div className="mt-8 flex items-start gap-3">
         <span className="text-5xl leading-none">{page.icon ?? "📄"}</span>
@@ -51,6 +56,10 @@ export default async function PageDetail({
             Enregistrer
           </button>
         </form>
+      </div>
+
+      <div className="mt-4">
+        <StatusSelector pageId={page.id} current={page.status} />
       </div>
 
       <div className="mt-6 border-t border-stone-100 pt-6">

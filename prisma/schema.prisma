@@ -26,6 +26,7 @@ model Page {
   title     String   @default("Sans titre")
   icon      String?
   content   Json?
+  status    String   @default("todo")
 
   parentId  String?
   parent    Page?    @relation("PageTree", fields: [parentId], references: [id], onDelete: Cascade)

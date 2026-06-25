@@ -1,24 +1,46 @@
-import { createPage } from "./actions";
+"use client";
+
+import { motion } from "motion/react";
+import CreatePageModal from "./CreatePageModal";
 
 export default function Home() {
   return (
     <main className="mx-auto flex min-h-screen max-w-2xl flex-col items-center justify-center px-12 text-center">
-      <div className="text-5xl">👋</div>
-      <h1 className="mt-4 text-2xl font-bold text-stone-900">
-        Bienvenue dans My Notion
-      </h1>
-      <p className="mt-2 text-stone-500">
-        Choisis une page à gauche, ou commence une nouvelle page.
-      </p>
+      <motion.div
+        initial={{ scale: 0, rotate: -30 }}
+        animate={{ scale: 1, rotate: 0 }}
+        transition={{ type: "spring", stiffness: 260, damping: 18 }}
+        className="text-6xl"
+      >
+        👋
+      </motion.div>
 
-      <form action={createPage} className="mt-6">
-        <button
-          type="submit"
-          className="rounded-lg bg-stone-900 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-stone-700"
-        >
-          + Créer une page
-        </button>
-      </form>
+      <motion.h1
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="mt-4 bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-3xl font-bold text-transparent"
+      >
+        Bienvenue dans My Notion
+      </motion.h1>
+
+      <motion.p
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.18 }}
+        className="mt-2 text-indigo-200"
+      >
+        Choisis une page à gauche, ou commence une nouvelle page.
+      </motion.p>
+
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.26 }}
+        className="mt-8"
+      >
+        <CreatePageModal />
+      </motion.div>
     </main>
   );
 }

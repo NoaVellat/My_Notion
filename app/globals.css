@@ -3,3 +3,37 @@
 body {
   font-family: ui-sans-serif, system-ui, sans-serif;
 }
+
+/* Le dégradé qui se déplace lentement, façon "aurore" */
+@keyframes aurora {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animated-bg {
+  background: linear-gradient(
+    -45deg,
+    #0f172a,
+    #1e1b4b,
+    #312e81,
+    #1e3a8a,
+    #0f172a
+  );
+  background-size: 400% 400%;
+  animation: aurora 18s ease infinite;
+}
+
+/* Une grille technique par-dessus */
+.tech-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
