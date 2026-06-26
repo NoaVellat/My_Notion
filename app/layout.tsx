@@ -30,6 +30,10 @@ export const metadata: Metadata = {
   description: "Mon clone de Notion",
 };
 
+// L'app lit/écrit en base à chaque rendu : aucune page ne doit être
+// pré-générée en statique au build (sinon Prisma tape la DB pendant le build).
+export const dynamic = "force-dynamic";
+
 export default async function RootLayout({
   children,
 }: {
