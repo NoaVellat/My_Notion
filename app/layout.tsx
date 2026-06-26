@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import Sidebar from "./Sidebar";
+import AgentPanel from "./AgentPanel";
 import "./globals.css";
 import AnimatedBackground from "./AnimatedBackground";
 import ThemeProvider from "./ThemeProvider";
@@ -66,6 +67,7 @@ export default async function RootLayout({
             >
               {children}
             </div>
+            <AgentPanel />
           </div>
         </ThemeProvider>
       </body>
